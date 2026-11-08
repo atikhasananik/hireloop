@@ -3,8 +3,6 @@ import Image from "next/image"
 import { Menu } from "lucide-react"
 import NavLinks from "./NavLinks"
 import UserMenu from "./UserMenu"
-import { ButtonLink } from "../ui/button-link"
-import { Separator } from "../ui/separator"
 import {
   Sheet,
   SheetClose,
@@ -35,7 +33,6 @@ const Navbar = () => {
         {/* Desktop nav */}
         <div className="hidden items-center md:flex">
           <NavLinks />
-          <Separator orientation="vertical" className="mx-5 h-5 bg-white/15" />
           <UserMenu />
         </div>
 
@@ -68,31 +65,10 @@ const Navbar = () => {
             >
               <NavLinks column />
             </SheetClose>
-            <div className="mt-auto flex flex-col gap-2 p-4">
-              <SheetClose
-                nativeButton={false}
-                render={
-                  <ButtonLink
-                    href="/signin"
-                    variant="ghost"
-                    className="w-full text-violet-400 hover:bg-white/5 hover:text-violet-300"
-                  />
-                }
-              >
-                Sign In
-              </SheetClose>
-              <SheetClose
-                nativeButton={false}
-                render={
-                  <ButtonLink
-                    href="/signup"
-                    size="lg"
-                    className="w-full bg-violet-600 text-white hover:bg-violet-700"
-                  />
-                }
-              >
-                Get Started
-              </SheetClose>
+            <div className="flex items-start justify-end flex-col gap-2 mx-2">
+              <div className="w-full">
+                <UserMenu />
+              </div>
             </div>
           </SheetContent>
         </Sheet>

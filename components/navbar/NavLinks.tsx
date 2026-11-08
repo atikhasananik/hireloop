@@ -17,7 +17,7 @@ const NavLinks = ({ column = false }: { column?: boolean }) => {
   const pathname = usePathname()
 
   return (
-    <ul className={cn("text-sm", column ? "flex flex-col" : "flex items-center gap-7")}>
+    <ul className={cn("text-sm border-r pr-3 mr-3 border-gray-400", column ? "flex flex-col" : "flex items-center gap-7") }>
       {navLinks.map((link) => (
         <li key={link.href}>
           <Link

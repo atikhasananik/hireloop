@@ -1,5 +1,7 @@
 import HeroSection from "@/components/home/hero-section/HeroSection"
 import GlobeSection from "@/components/home/globe-section/GlobeSection"
+import DiscoverySection from "@/components/home/discovery-section/DiscoverySection"
+import FeaturesSection from "@/components/home/features-section/FeaturesSection"
 import GlobeBackground from "@/components/home/globe-section/GlobeBackground"
 
 export default function Page() {
@@ -11,6 +13,8 @@ export default function Page() {
       <div className="relative z-10">
         <HeroSection />
         <GlobeSection />
+        <DiscoverySection />
+        <FeaturesSection />
       </div>
     </main>
   )

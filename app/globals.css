@@ -127,3 +127,15 @@
     @apply font-sans;
     }
 }
+
+/* site-wide toasts: the kit toast uses popover tokens (white in light mode),
+   which would clash on the dark pages — force the site's dark card language */
+[data-slot="toast"] {
+  background-color: #131316;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-slot="toast-description"] {
+  color: rgba(255, 255, 255, 0.6);
+}

@@ -1,6 +1,6 @@
 "use client"
 
-import { type FormEvent } from "react"
+import { useState, type FormEvent } from "react"
 import Link from "next/link"
 import { Separator } from "../../ui/separator"
 import { Button } from "../../ui/button"
@@ -23,13 +23,15 @@ const fieldClasses =
 // sign-in UI, mirroring the signup card. Inputs are uncontrolled; the only
 // interactive state component is the Remember-me checkbox.
 const SigninForm = () => {
+  const [rememberMe, setRememberMe] = useState<boolean>(false)
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const formData = Object.fromEntries(
       data.entries()
     ) as unknown as SigninFormData
-    console.log(formData)
+    const updatedData = {...formData,rememberMe}
+    console.log(updatedData)
   }
 
   return (
@@ -91,6 +93,11 @@ const SigninForm = () => {
           {/* remember me */}
           <label className="mt-1 flex items-center gap-2.5 text-sm text-white/65">
             <Checkbox
+            onCheckedChange={() => {
+              setRememberMe((val ) => !val
+              )
+            }
+            }
               name="rememberMe"
               className="size-4! border-white/25! bg-transparent! data-checked:border-violet-500! data-checked:bg-violet-600!"
             />

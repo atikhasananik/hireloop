@@ -1,8 +1,16 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
+import { useEffect, useRef, useState, type FormEvent } from "react"
 import Link from "next/link"
-import { Briefcase, ShieldCheck, UserSearch, type LucideIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
+import {
+  Briefcase,
+  CircleCheck,
+  ShieldCheck,
+  TriangleAlert,
+  UserSearch,
+  type LucideIcon,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Separator } from "../../ui/separator"
 import { Button } from "../../ui/button"
@@ -12,6 +20,8 @@ import { Input } from "../../ui/input"
 import { Label } from "../../ui/label"
 import PasswordInput from "./PasswordInput"
 import GoogleIcon from "../GoogleIcon"
+import { signUp } from "@/lib/auth-client"
+import { toast } from "@/components/ui/toast"
 
 export type SignupFormData = {
   name: string
@@ -21,8 +31,6 @@ export type SignupFormData = {
   /** which side of the marketplace is signing up — defaults to "seeker" */
   role: "seeker" | "recruiter" | "admin"
 }
-
-
 
 const fieldClasses =
   "h-11! w-full rounded-xl! border-white/10! bg-white/[0.04]! px-4! text-sm! text-white! shadow-none! hover:bg-white/[0.05]! focus-visible:border-violet-500/60! focus-visible:ring-violet-500/30! dark:bg-input/30! placeholder:text-white/40!"
@@ -40,20 +48,70 @@ const roleOptions: {
 // signup UI. Inputs are uncontrolled; the only interactive state is the
 // checkbox (gates the CTA) — see PasswordInput for the eye toggle.
 const SignupForm = () => {
+  const router = useRouter()
+  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [agreeTerms, setAgreeTerms] = useState(false)
   const [role, setRole] = useState<SignupFormData["role"]>("seeker")
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  // clears any scheduled redirect if the component unmounted first
+  useEffect(() => () => {
+    if (redirectTimer.current) clearTimeout(redirectTimer.current)
+  }, [])
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const fromData = new FormData(event.currentTarget)
-    const data = Object.fromEntries(fromData.entries()) as unknown as SignupFormData
+    const formData = new FormData(event.currentTarget)
+    const data = Object.fromEntries(
+      formData.entries()
+    ) as unknown as SignupFormData
     const updatedData = { ...data, agreeTerms, role } as SignupFormData
-  
-    console.log("SignupForm data:", updatedData)
+
+    setPending(true)
+    setError(null)
+
+    const { data: resData, error: signupError } = await signUp.email({
+      name: updatedData.name,
+      email: updatedData.email,
+      password: updatedData.password,
+      role: updatedData.role, // allowed via input: true in auth.ts
+    })
+
+    if (signupError) {
+      const message =
+        signupError.message ?? "Something went wrong. Please try again."
+
+      toast.add({
+        type: "error",
+        title: "Sign up failed",
+        description: message,
+      })
+      setError(message)
+      setPending(false)
+      return
+    }
+
+    if (resData?.user) {
+      setSuccess(true)
+
+      toast.add({
+        type: "success",
+        title: "Account created",
+        description: "Welcome to HireLoop — you're all set.",
+      })
+
+      // let the user actually see the success line + toast before leaving
+      redirectTimer.current = setTimeout(() => router.push("/"), 1400)
+      return // pending stays true through the redirect
+    }
+
+    setPending(false)
   }
 
   return (
-    <Card className="w-full max-w-md rounded-2xl! my-30 mx-auto bg-[#0d0e14]! py-7! ring-white/10! sm:py-8!">
+    <Card className="mx-auto my-30 w-full max-w-md rounded-2xl! bg-[#0d0e14]! py-7! ring-white/10! sm:py-8!">
       <CardContent className="flex flex-col gap-7 px-6! sm:px-8!">
         {/* heading */}
         <div className="text-center">
@@ -65,11 +123,17 @@ const SignupForm = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4"
+          noValidate
+        >
           {/* role picker — the hidden input makes the selection readable from
               FormData by getFormData */}
           <div>
-            <Label className="text-xs! font-medium text-white/75!">I am a</Label>
+            <Label className="text-xs! font-medium text-white/75!">
+              I am a
+            </Label>
             <div
               role="radiogroup"
               aria-label="Account role"
@@ -86,14 +150,17 @@ const SignupForm = () => {
                     aria-pressed={selected}
                     onClick={() => setRole(id)}
                     className={cn(
-                      "flex h-16! flex-col items-center justify-center gap-1.5 rounded-xl! text-xs! font-medium transition-colors border active:translate-y-0!",
+                      "flex h-16! flex-col items-center justify-center gap-1.5 rounded-xl! border text-xs! font-medium transition-colors active:translate-y-0!",
                       selected
                         ? "border-violet-500/80! bg-violet-600/15! text-white!"
                         : "border-white/10! bg-white/[0.03]! text-white/60! hover:bg-white/[0.07]! hover:text-white/85!"
                     )}
                   >
                     <RoleIcon
-                      className={cn("size-5", selected ? "text-violet-400" : "text-white/50")}
+                      className={cn(
+                        "size-5",
+                        selected ? "text-violet-400" : "text-white/50"
+                      )}
                     />
                     {label}
                   </button>
@@ -104,7 +171,10 @@ const SignupForm = () => {
 
           {/* Full name */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="name" className="text-xs! font-medium text-white/75!">
+            <Label
+              htmlFor="name"
+              className="text-xs! font-medium text-white/75!"
+            >
               Full name
             </Label>
             <Input
@@ -120,7 +190,10 @@ const SignupForm = () => {
 
           {/* Email */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="email" className="text-xs! font-medium text-white/75!">
+            <Label
+              htmlFor="email"
+              className="text-xs! font-medium text-white/75!"
+            >
               Email
             </Label>
             <Input
@@ -136,7 +209,10 @@ const SignupForm = () => {
 
           {/* Password */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="password" className="text-xs! font-medium text-white/75!">
+            <Label
+              htmlFor="password"
+              className="text-xs! font-medium text-white/75!"
+            >
               Password
             </Label>
             <PasswordInput
@@ -156,23 +232,49 @@ const SignupForm = () => {
             />
             <span>
               I agree to the{" "}
-              <Link href="#" className="font-medium text-violet-400 hover:text-violet-300">
+              <Link
+                href="#"
+                className="font-medium text-violet-400 hover:text-violet-300"
+              >
                 Terms
               </Link>{" "}
               &amp;{" "}
-              <Link href="#" className="font-medium text-violet-400 hover:text-violet-300">
+              <Link
+                href="#"
+                className="font-medium text-violet-400 hover:text-violet-300"
+              >
                 Policy
               </Link>
             </span>
           </label>
 
+          {/* API feedback: toast on top, mirrors the outcome here in the form */}
+          {error && (
+            <p
+              role="alert"
+              className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300"
+            >
+              <TriangleAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+              <span>{error}</span>
+            </p>
+          )}
+          {success && (
+            <p
+              role="status"
+              className="flex items-start gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-300"
+            >
+              <CircleCheck className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+              <span>Account created successfully — redirecting…</span>
+            </p>
+          )}
+
           {/* submit */}
           <Button
             type="submit"
-            disabled={!agreeTerms}
+            disabled={!agreeTerms || pending || success}
             className="h-11! w-full rounded-xl! bg-violet-600! text-sm! font-medium text-white! hover:bg-violet-700! disabled:cursor-not-allowed! disabled:opacity-40!"
           >
-            Create account
+            {pending ? "Creating account…" : success ? "Account created" : "Create account"}
           </Button>
         </form>
 
@@ -196,7 +298,10 @@ const SignupForm = () => {
         {/* switch to sign in */}
         <p className="text-center text-sm text-white/55">
           Already have an account?{" "}
-          <Link href="/" className="font-medium text-violet-400 hover:text-violet-300">
+          <Link
+            href="/"
+            className="font-medium text-violet-400 hover:text-violet-300"
+          >
             Sign in
           </Link>
         </p>

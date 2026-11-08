@@ -22,7 +22,13 @@ const Navbar = () => {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image src={logo} width={130} height={37} alt="HireLoop logo" priority />
+          <Image
+            src={logo}
+            width={130}
+            height={37}
+            alt="HireLoop logo"
+            priority
+          />
         </Link>
 
         {/* Desktop nav */}
@@ -65,20 +71,39 @@ const Navbar = () => {
             className="border-white/10 bg-slate-950 text-white sm:max-w-xs"
           >
             <SheetHeader>
-              <Image src={logo} width={117} height={33} alt="HireLoop logo" />
+              <SheetClose render={<Link href="/" className="inline-flex" />}>
+                <Image src={logo} width={117} height={33} alt="HireLoop logo — go to home" />
+              </SheetClose>
               <SheetTitle className="sr-only">Navigation menu</SheetTitle>
             </SheetHeader>
-            <nav className="flex flex-col gap-3 px-4 text-sm">
+            <SheetClose
+            nativeButton={false}
+              render={<nav className="flex flex-col gap-3 px-4 text-sm" />}
+            >
               <NavLinks column />
-            </nav>
+            </SheetClose>
             <div className="mt-auto flex flex-col gap-2 p-4">
               <SheetClose
-                render={<ButtonLink href="/signin" variant="ghost" className="w-full text-violet-400 hover:bg-white/5 hover:text-violet-300" />}
+                nativeButton={false}
+                render={
+                  <ButtonLink
+                    href="/signin"
+                    variant="ghost"
+                    className="w-full text-violet-400 hover:bg-white/5 hover:text-violet-300"
+                  />
+                }
               >
                 Sign In
               </SheetClose>
               <SheetClose
-                render={<ButtonLink href="/signup" size="lg" className="w-full bg-violet-600 text-white hover:bg-violet-700" />}
+                nativeButton={false}
+                render={
+                  <ButtonLink
+                    href="/signup"
+                    size="lg"
+                    className="w-full bg-violet-600 text-white hover:bg-violet-700"
+                  />
+                }
               >
                 Get Started
               </SheetClose>

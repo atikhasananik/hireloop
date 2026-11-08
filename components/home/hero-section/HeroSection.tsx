@@ -1,23 +1,24 @@
-"use client"
-
-import { useState } from "react"
+import Link from "next/link"
 import { Badge } from "../../ui/badge"
 import HeroSearchForm from "./HeroSearchForm"
-import { cn } from "@/lib/utils"
 
-const trendingKeywords = ["Product Designer", "AI Engineering", "Dev-ops Engineer"]
+const trendingKeywords = [
+  "Product Designer",
+  "AI Engineering",
+  "Dev-ops Engineer",
+]
 
-const activePillClasses = "border-white/20 bg-white/10 text-white"
-const inactivePillClasses =
-  "border-white/10 bg-white/[0.03] text-white/70 hover:bg-white/10 hover:text-white"
-
+// server component: all hero markup is static; the trending pills are plain
+// links into /jobs so the section ships zero client JS. The search form is the
+// only interactive island (client, see HeroSearchForm).
 const HeroSection = () => {
-  const [keyword, setKeyword] = useState("")
-  const [location, setLocation] = useState("")
-
   return (
     <section className="relative px-4 py-24 text-white">
-    
+      {/* Bottom glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-[-220px] left-1/2 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-violet-600/25 blur-[110px]"
+      />
 
       <div className="relative mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">
         {/* Announcement pill */}
@@ -44,29 +45,20 @@ const HeroSection = () => {
 
         {/* Search bar */}
         <div className="mt-6 w-full">
-          <HeroSearchForm
-            keyword={keyword}
-            location={location}
-            onKeywordChange={setKeyword}
-            onLocationChange={setLocation}
-          />
+          <HeroSearchForm />
         </div>
 
         {/* Trending keywords */}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <span className="text-sm text-white/50">Trending Position</span>
-          {trendingKeywords.map((label, index) => (
-            <button
+          {trendingKeywords.map((label) => (
+            <Link
               key={label}
-              type="button"
-              onClick={() => setKeyword(label)}
-              className={cn(
-                "h-8 rounded-full border px-4 text-xs transition-colors",
-                keyword ? keyword === label : index === 0 ? activePillClasses : inactivePillClasses
-              )}
+              href={`/jobs?q=${encodeURIComponent(label)}`}
+              className="h-8 rounded-full border border-white/10 bg-white/[0.03] px-4 text-xs leading-8 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
             >
               {label}
-            </button>
+            </Link>
           ))}
         </div>
       </div>

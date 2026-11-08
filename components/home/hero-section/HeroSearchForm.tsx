@@ -1,25 +1,17 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { MapPin, Search } from "lucide-react"
 import { Button } from "../../ui/button"
 import { Input } from "../../ui/input"
 import { Separator } from "../../ui/separator"
 
-type HeroSearchFormProps = {
-  keyword: string
-  location: string
-  onKeywordChange: (value: string) => void
-  onLocationChange: (value: string) => void
-}
-
-const HeroSearchForm = ({
-  keyword,
-  location,
-  onKeywordChange,
-  onLocationChange,
-}: HeroSearchFormProps) => {
+// the only interactive island of the hero: type-safe search that navigates to /jobs
+const HeroSearchForm = () => {
   const router = useRouter()
+  const [keyword, setKeyword] = useState("")
+  const [location, setLocation] = useState("")
 
   return (
     <form
@@ -36,7 +28,7 @@ const HeroSearchForm = ({
         <Input
           type="text"
           value={keyword}
-          onChange={(event) => onKeywordChange(event.target.value)}
+          onChange={(event) => setKeyword(event.target.value)}
           placeholder="Job title, skill or company"
           className="h-full! border-transparent! bg-transparent! pl-10! text-white placeholder:text-white/40 focus-visible:border-transparent! focus-visible:ring-0!"
         />
@@ -50,7 +42,7 @@ const HeroSearchForm = ({
         <Input
           type="text"
           value={location}
-          onChange={(event) => onLocationChange(event.target.value)}
+          onChange={(event) => setLocation(event.target.value)}
           placeholder="Location or Remote"
           className="h-full! border-transparent! bg-transparent! pl-10! text-white placeholder:text-white/40 focus-visible:border-transparent! focus-visible:ring-0!"
         />

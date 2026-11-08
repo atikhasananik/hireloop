@@ -1,10 +1,7 @@
-"use client"
-
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
-import { cn } from "@/lib/utils"
+import NavLinks from "./NavLinks"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
 import {
@@ -17,58 +14,31 @@ import {
 } from "../ui/sheet"
 import logo from "@/app/images/logo.png"
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Browse Jobs", href: "/jobs" },
-  { label: "Company", href: "/company" },
-  { label: "Pricing", href: "/pricing" },
-]
-
+// server component: interactive pieces (routes sheet, pathname links) are
+// client islands imported from ./NavLinks and ../ui/sheet.
 const Navbar = () => {
-  const pathname = usePathname()
-
   return (
     <header className="border-b border-white/10 bg-slate-950 text-white">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image
-            src={logo}
-            width={130}
-            height={37}
-            alt="HireLoop logo"
-            priority
-          />
+          <Image src={logo} width={130} height={37} alt="HireLoop logo" priority />
         </Link>
 
         {/* Desktop nav */}
         <div className="hidden items-center md:flex">
-          <ul className="flex items-center gap-7 text-sm">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={cn(
-                    "transition-colors hover:text-white",
-                    pathname === link.href
-                      ? "font-medium text-white"
-                      : "text-white/70"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <NavLinks />
           <Separator orientation="vertical" className="mx-5 h-5 bg-white/15" />
           <div className="flex items-center gap-2">
             <Button
+              render={<Link href="/" />}
               variant="ghost"
               className="text-violet-400 hover:bg-white/5 hover:text-violet-300"
             >
               Sign In
             </Button>
             <Button
+              render={<Link href="/" />}
               size="lg"
               className="bg-violet-600 text-white hover:bg-violet-700"
             >
@@ -99,36 +69,15 @@ const Navbar = () => {
               <SheetTitle className="sr-only">Navigation menu</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-3 px-4 text-sm">
-              <ul className="flex flex-col">
-                {navLinks.map((link) => (
-                  <li key={link.href}>
-                    <SheetClose
-                    nativeButton={false}
-                      render={
-                        <Link
-                          href={link.href}
-                          className="block rounded-md px-3 py-2 transition-colors"
-                        />
-                      }
-                      className={cn(
-                        "outline-none",
-                        pathname === link.href
-                          ? "font-medium text-white"
-                          : "text-white/70 hover:bg-white/5 hover:text-white focus-visible:bg-white/5 focus-visible:text-white"
-                      )}
-                    >
-                      {link.label}
-                    </SheetClose>
-                  </li>
-                ))}
-              </ul>
+              <NavLinks column />
             </nav>
             <div className="mt-auto flex flex-col gap-2 p-4">
               <SheetClose
                 render={
                   <Button
+                    render={<Link href="/" />}
                     variant="ghost"
-                    className="text-violet-400 hover:bg-white/5 hover:text-violet-300"
+                    className="text-violet-400 hover:bg-white/5 hover:text-violet-300 w-full"
                   />
                 }
               >
@@ -137,8 +86,9 @@ const Navbar = () => {
               <SheetClose
                 render={
                   <Button
+                    render={<Link href="/" />}
                     size="lg"
-                    className="bg-violet-600 text-white hover:bg-violet-700"
+                    className="bg-violet-600 text-white hover:bg-violet-700 w-full"
                   />
                 }
               >

@@ -1,5 +1,4 @@
 import type { LucideIcon } from "lucide-react"
-import { BarChart3, Briefcase, Search, Star } from "lucide-react"
 import { Card, CardContent } from "../../ui/card"
 
 export type Stat = {

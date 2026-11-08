@@ -38,7 +38,7 @@ const Navbar = () => {
               Sign In
             </ButtonLink>
             <ButtonLink
-              href="/"
+              href="/signup"
               size="lg"
               className="bg-violet-600 text-white hover:bg-violet-700"
             >
@@ -78,7 +78,7 @@ const Navbar = () => {
                 Sign In
               </SheetClose>
               <SheetClose
-                render={<ButtonLink href="/" size="lg" className="w-full bg-violet-600 text-white hover:bg-violet-700" />}
+                render={<ButtonLink href="/signup" size="lg" className="w-full bg-violet-600 text-white hover:bg-violet-700" />}
               >
                 Get Started
               </SheetClose>

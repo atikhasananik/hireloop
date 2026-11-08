@@ -18,7 +18,7 @@ export default function Page() {
         <DiscoverySection />
         <FeaturesSection />
         <PricingSection />
-        <CtaSection createAccountHref="/jobs" />
+        <CtaSection createAccountHref="/signup" />
       </div>
     </main>
   )

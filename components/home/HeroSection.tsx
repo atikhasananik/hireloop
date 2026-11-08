@@ -14,31 +14,10 @@ const inactivePillClasses =
 const HeroSection = () => {
   const [keyword, setKeyword] = useState("")
   const [location, setLocation] = useState("")
-  console.log("keyword",keyword,"location",location)
 
   return (
-    <section className="relative overflow-hidden bg-[#08080c] px-4 py-24 text-white">
-      {/* Decorative stars */}
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-70"
-        style={{
-          backgroundImage:
-            "radial-gradient(1px 1px at 12% 20%, rgba(255,255,255,0.45) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 38% 12%, rgba(255,255,255,0.3) 50%, transparent 51%)," +
-            "radial-gradient(1.5px 1.5px at 66% 32%, rgba(255,255,255,0.4) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 86% 62%, rgba(255,255,255,0.3) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 24% 72%, rgba(255,255,255,0.25) 50%, transparent 51%)," +
-            "radial-gradient(1.5px 1.5px at 55% 88%, rgba(255,255,255,0.25) 50%, transparent 51%)",
-          backgroundSize: "600px 420px",
-        }}
-      />
-
-      {/* Bottom glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-[-220px] left-1/2 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-violet-600/25 blur-[110px]"
-      />
+    <section className="relative px-4 py-24 text-white">
+    
 
       <div className="relative mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">
         {/* Announcement pill */}

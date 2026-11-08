@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "../ui/button"
+import { ButtonLink } from "../ui/button-link"
 import { Separator } from "../ui/separator"
 import logo from "@/app/images/logo.png"
 
@@ -116,30 +116,30 @@ const Footer = () => {
         <Separator className="mt-14 bg-white/[0.06]" />
         <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
-            <Button
-              render={<Link href="/" />}
+            <ButtonLink
+              href="/"
               aria-label="Facebook"
               size="icon"
               className="size-9! rounded-lg! border-white/10! bg-white/[0.04]! text-white/80! hover:bg-white/[0.08]! hover:text-white!"
             >
               <FacebookIcon />
-            </Button>
-            <Button
-              render={<Link href="/" />}
+            </ButtonLink>
+            <ButtonLink
+              href="/"
               aria-label="Pinterest"
               size="icon"
               className="size-9! rounded-lg! bg-violet-600! text-white! hover:bg-violet-700!"
             >
               <PinterestIcon />
-            </Button>
-            <Button
-              render={<Link href="/" />}
+            </ButtonLink>
+            <ButtonLink
+              href="/"
               aria-label="LinkedIn"
               size="icon"
               className="size-9! rounded-lg! border-white/10! bg-white/[0.04]! text-white/80! hover:bg-white/[0.08]! hover:text-white!"
             >
               <LinkedinIcon />
-            </Button>
+            </ButtonLink>
           </div>
 
           <div className="flex flex-col gap-2 text-sm text-white/50 sm:flex-row sm:items-center sm:gap-4">

@@ -14,10 +14,10 @@ const trendingKeywords = [
 const HeroSection = () => {
   return (
     <section className="relative px-4 py-24 text-white">
-      {/* Bottom glow */}
+      {/* Bottom glow (width clamps on mobile so it never widens the page) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-[-220px] left-1/2 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-violet-600/25 blur-[110px]"
+        className="pointer-events-none absolute bottom-[-120px] left-1/2 -translate-x-1/2 rounded-full bg-violet-600/25 blur-[60px] h-[240px] w-[min(720px,150vw)] sm:bottom-[-220px] sm:h-[420px] sm:w-[720px] sm:blur-[110px]"
       />
 
       <div className="relative mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">

@@ -8,7 +8,7 @@ import GlobeBackground from "@/components/home/globe-section/GlobeBackground"
 
 export default function Page() {
   return (
-    <main className="relative isolate bg-[#08080c] text-white">
+    <main className="relative isolate overflow-x-clip bg-[#08080c] text-white">
       {/* globe background behind the whole page (first screen) */}
       <GlobeBackground />
 

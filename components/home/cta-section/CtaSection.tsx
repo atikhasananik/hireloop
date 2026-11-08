@@ -1,6 +1,5 @@
-import Link from "next/link"
 import Image from "next/image"
-import { Button } from "../../ui/button"
+import { ButtonLink } from "../../ui/button-link"
 import ctaBg from "@/app/images/cta-bg.png"
 
 // Exact arc geometry of cta-bg.png (1440x964): the grid dome is a circular arc
@@ -23,10 +22,11 @@ const CtaSection = ({ createAccountHref }: CtaSectionProps) => {
     <section className="isolate relative overflow-hidden bg-[#08080c] px-4 text-white">
       <div className="relative flex min-h-[560px] flex-col items-center justify-center overflow-hidden py-24 text-center sm:min-h-[640px]">
         {/* background art wrapper: glow ring + grid dome, sharing the image's
-            exact aspect box so the glow curve aligns with the drawn arc */}
+            exact aspect box so the glow curve aligns with the drawn arc. Scaled
+            up on smaller viewports so the arc's height covers the section. */}
         <div
           aria-hidden
-          className="absolute top-0 left-1/2 aspect-[1440/964] w-[160%] max-w-none -translate-x-1/2 sm:w-full"
+          className="absolute top-0 left-1/2 aspect-[1440/964] w-[240%] max-w-none -translate-x-1/2 sm:w-[160%] lg:w-full"
         >
           {/* violet glow ringing the dome's arc, faded downward */}
           <div
@@ -53,7 +53,7 @@ const CtaSection = ({ createAccountHref }: CtaSectionProps) => {
             alt=""
             aria-hidden
             fill
-            sizes="100vw"
+            sizes="(min-width: 1024px) 100vw, (min-width: 640px) 160vw, 240vw"
             className="pointer-events-none object-cover mix-blend-multiply"
           />
 
@@ -71,20 +71,20 @@ const CtaSection = ({ createAccountHref }: CtaSectionProps) => {
             morning.
           </p>
           <div className="mt-3 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <Button
-              render={<Link href={createAccountHref} />}
+            <ButtonLink
+              href={createAccountHref}
               size="lg"
               className="h-11 w-full! justify-center rounded-lg! bg-white! px-6! font-medium text-[#0d0e14]! hover:bg-white/90! sm:w-auto!"
             >
               Create a free account
-            </Button>
-            <Button
-              render={<Link href="/pricing" />}
+            </ButtonLink>
+            <ButtonLink
+              href="/pricing"
               size="lg"
               className="h-11 w-full! justify-center rounded-lg! border-white/15! bg-white/[0.06]! px-6! font-medium text-white! hover:bg-white/[0.11]! sm:w-auto!"
             >
               View pricing
-            </Button>
+            </ButtonLink>
           </div>
         </div>
       </div>

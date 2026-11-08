@@ -1,7 +1,6 @@
 import { ArrowRight, Crown, Plus, TrendingUp, Zap, type LucideIcon } from "lucide-react"
-import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { Button } from "../../ui/button"
+import { ButtonLink } from "../../ui/button-link"
 import { Card, CardContent } from "../../ui/card"
 
 export type PlanIcon = "crown" | "growth" | "premium"
@@ -45,8 +44,8 @@ const PlanCard = ({ plan, billing }: { plan: Plan; billing: Billing }) => {
             </div>
             <p className="text-lg font-medium text-white">{plan.name}</p>
           </div>
-          <div className="text-right">
-            <span className="text-4xl font-bold tracking-tight text-white xl:text-[2.75rem]">
+          <div className="whitespace-nowrap text-right">
+            <span className="text-3xl font-bold tracking-tight text-white sm:text-4xl xl:text-[2.75rem]">
               ${price}
             </span>
             <span className="text-xs text-white/50">/month</span>
@@ -73,8 +72,8 @@ const PlanCard = ({ plan, billing }: { plan: Plan; billing: Billing }) => {
         </div>
 
         {/* CTA */}
-        <Button
-          render={<Link href="/jobs" />}
+        <ButtonLink
+          href="/jobs"
           className={cn(
             "mt-auto h-11 w-full! justify-between rounded-lg! px-4! text-sm font-medium",
             plan.recommended
@@ -86,7 +85,7 @@ const PlanCard = ({ plan, billing }: { plan: Plan; billing: Billing }) => {
           <ArrowRight
             className={cn("size-4", plan.recommended ? "text-[#0d0e14]" : "text-white/70")}
           />
-        </Button>
+        </ButtonLink>
       </CardContent>
     </Card>
   )

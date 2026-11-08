@@ -28,13 +28,18 @@ const GlobeBackground = () => (
     <div className="absolute inset-x-0 top-0 h-[60%] opacity-70" style={starPatternStyle} />
 
     {/* globe */}
+    {/* globe — scaled up on narrow viewports (portrait screens shrink a full-width
+        landscape render to a strip) so the sphere keeps filling the first screen */}
     <Image
       src={globe}
       alt=""
       priority
-      sizes="100vw"
-      className="absolute top-0 left-1/2 w-full max-w-none -translate-x-1/2 -translate-y-[38%] "
+      sizes="(min-width: 1024px) 100vw, (min-width: 768px) 140vw, (min-width: 640px) 200vw, 260vw"
+      className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[38%] w-[260vw] max-w-none sm:w-[200vw] md:w-[140vw] lg:w-full"
     />
+
+    {/* fades the background's bottom edge into the page instead of a hard cut */}
+    <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-[#08080c]" />
   </div>
 )
 

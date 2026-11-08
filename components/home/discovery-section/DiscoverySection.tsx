@@ -1,5 +1,4 @@
-import Link from "next/link"
-import { Button } from "../../ui/button"
+import { ButtonLink } from "../../ui/button-link"
 import DiscoveryCard, { type DiscoveryJob } from "./DiscoveryCard"
 
 const jobs: DiscoveryJob[] = [
@@ -84,14 +83,13 @@ const DiscoverySection = () => {
         ))}
       </div>
 
-      <Button
-      nativeButton={false}
-        render={<Link href="/jobs" />}
+      <ButtonLink
+        href="/jobs"
         size="lg"
         className="mt-12 h-10! rounded-lg! bg-white! px-5! font-medium text-[#0d0e14]! hover:bg-white/90!"
       >
         View all job openings
-      </Button>
+      </ButtonLink>
     </section>
   )
 }

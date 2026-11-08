@@ -31,6 +31,7 @@ const Navbar = () => {
           <Separator orientation="vertical" className="mx-5 h-5 bg-white/15" />
           <div className="flex items-center gap-2">
             <Button
+            nativeButton={false}
               render={<Link href="/" />}
               variant="ghost"
               className="text-violet-400 hover:bg-white/5 hover:text-violet-300"
@@ -38,6 +39,7 @@ const Navbar = () => {
               Sign In
             </Button>
             <Button
+            nativeButton={false}
               render={<Link href="/" />}
               size="lg"
               className="bg-violet-600 text-white hover:bg-violet-700"

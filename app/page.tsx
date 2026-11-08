@@ -3,6 +3,7 @@ import GlobeSection from "@/components/home/globe-section/GlobeSection"
 import DiscoverySection from "@/components/home/discovery-section/DiscoverySection"
 import FeaturesSection from "@/components/home/features-section/FeaturesSection"
 import PricingSection from "@/components/home/pricing-section/PricingSection"
+import CtaSection from "@/components/home/cta-section/CtaSection"
 import GlobeBackground from "@/components/home/globe-section/GlobeBackground"
 
 export default function Page() {
@@ -17,6 +18,7 @@ export default function Page() {
         <DiscoverySection />
         <FeaturesSection />
         <PricingSection />
+        <CtaSection createAccountHref="/jobs" />
       </div>
     </main>
   )

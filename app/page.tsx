@@ -1,6 +1,6 @@
-import HeroSection from "@/components/home/HeroSection"
-import GlobeSection from "@/components/home/GlobeSection"
-import GlobeBackground from "@/components/home/GlobeBackground"
+import HeroSection from "@/components/home/hero-section/HeroSection"
+import GlobeSection from "@/components/home/globe-section/GlobeSection"
+import GlobeBackground from "@/components/home/globe-section/GlobeBackground"
 
 export default function Page() {
   return (

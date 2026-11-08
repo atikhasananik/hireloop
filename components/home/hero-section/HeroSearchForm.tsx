@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation"
 import { MapPin, Search } from "lucide-react"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Separator } from "../ui/separator"
+import { Button } from "../../ui/button"
+import { Input } from "../../ui/input"
+import { Separator } from "../../ui/separator"
 
 type HeroSearchFormProps = {
   keyword: string
@@ -25,13 +25,13 @@ const HeroSearchForm = ({
     <form
       onSubmit={(event) => {
         event.preventDefault()
-        const params = new URLSearchParams({ quary: keyword, location })
+        const params = new URLSearchParams({ q: keyword, location })
         router.push(`/jobs?${params.toString()}`)
       }}
-      className="mx-auto flex items-center justify-between w-full max-w-2xl flex-col gap-2 rounded-full border border-white/10 bg-white/[0.04] p-2 backdrop-blur-sm transition-colors focus-within:border-white/20 focus-within:bg-white/[0.07] sm:flex-row sm:items-center"
+      className="mx-auto flex w-full max-w-2xl flex-col gap-2 sm:flex-row sm:items-center sm:rounded-full sm:border sm:border-white/10 sm:bg-white/[0.04] sm:p-2 sm:backdrop-blur-sm sm:transition-colors sm:focus-within:border-white/20 sm:focus-within:bg-white/[0.07]"
     >
       {/* Keyword */}
-      <div className="relative h-10 sm:h-9  sm:flex-1">
+      <div className="relative flex h-12 items-center rounded-xl border border-white/10 bg-white/[0.04] transition-colors focus-within:border-white/25 sm:h-9 sm:flex-1 sm:rounded-none sm:border-0 sm:bg-transparent sm:focus-within:border-transparent">
         <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-white/50" />
         <Input
           type="text"
@@ -45,7 +45,7 @@ const HeroSearchForm = ({
       <Separator orientation="vertical" className="hidden h-6 bg-white/15! sm:block" />
 
       {/* Location */}
-      <div className="relative h-10 sm:h-9 sm:flex-1">
+      <div className="relative flex h-12 items-center rounded-xl border border-white/10 bg-white/[0.04] transition-colors focus-within:border-white/25 sm:h-9 sm:flex-1 sm:rounded-none sm:border-0 sm:bg-transparent sm:focus-within:border-transparent">
         <MapPin className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-white/50" />
         <Input
           type="text"
@@ -60,9 +60,10 @@ const HeroSearchForm = ({
         type="submit"
         aria-label="Search jobs"
         size="icon-sm"
-        className="size-10! shrink-0 rounded-xl! bg-violet-600! text-white! hover:bg-violet-700! sm:size-9!"
+        className="h-12! w-full! shrink-0 justify-center gap-2 rounded-xl! bg-violet-600! text-white! hover:bg-violet-700! sm:h-9! sm:w-9!"
       >
         <Search />
+        <span className="sm:hidden">Search</span>
       </Button>
     </form>
   )

@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Menu } from "lucide-react"
 import NavLinks from "./NavLinks"
+import UserMenu from "./UserMenu"
 import { ButtonLink } from "../ui/button-link"
 import { Separator } from "../ui/separator"
 import {
@@ -35,22 +36,7 @@ const Navbar = () => {
         <div className="hidden items-center md:flex">
           <NavLinks />
           <Separator orientation="vertical" className="mx-5 h-5 bg-white/15" />
-          <div className="flex items-center gap-2">
-            <ButtonLink
-              href="/signin"
-              variant="ghost"
-              className="text-violet-400 hover:bg-white/5 hover:text-violet-300"
-            >
-              Sign In
-            </ButtonLink>
-            <ButtonLink
-              href="/signup"
-              size="lg"
-              className="bg-violet-600 text-white hover:bg-violet-700"
-            >
-              Get Started
-            </ButtonLink>
-          </div>
+          <UserMenu />
         </div>
 
         {/* Mobile nav */}

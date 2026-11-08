@@ -31,7 +31,7 @@ const Navbar = () => {
           <Separator orientation="vertical" className="mx-5 h-5 bg-white/15" />
           <div className="flex items-center gap-2">
             <ButtonLink
-              href="/"
+              href="/signin"
               variant="ghost"
               className="text-violet-400 hover:bg-white/5 hover:text-violet-300"
             >
@@ -73,7 +73,7 @@ const Navbar = () => {
             </nav>
             <div className="mt-auto flex flex-col gap-2 p-4">
               <SheetClose
-                render={<ButtonLink href="/" variant="ghost" className="w-full text-violet-400 hover:bg-white/5 hover:text-violet-300" />}
+                render={<ButtonLink href="/signin" variant="ghost" className="w-full text-violet-400 hover:bg-white/5 hover:text-violet-300" />}
               >
                 Sign In
               </SheetClose>

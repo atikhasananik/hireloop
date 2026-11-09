@@ -54,19 +54,24 @@ const Navbar = () => {
             className="border-white/10 bg-slate-950 text-white sm:max-w-xs"
           >
             <SheetHeader>
-              <SheetClose render={<Link href="/" className="inline-flex" />}>
-                <Image src={logo} width={117} height={33} alt="HireLoop logo — go to home" />
+              <SheetClose
+                nativeButton={false}
+                render={<Link href="/" className="inline-flex" />}
+              >
+                <Image
+                  src={logo}
+                  width={117}
+                  height={33}
+                  alt="HireLoop logo — go to home"
+                />
               </SheetClose>
               <SheetTitle className="sr-only">Navigation menu</SheetTitle>
             </SheetHeader>
-            <SheetClose
-            nativeButton={false}
-              render={<nav className="flex flex-col gap-3 px-4 text-sm" />}
-            >
+            <SheetClose nativeButton={false}>
               <NavLinks column />
             </SheetClose>
-            <div className="flex items-start justify-end flex-col gap-2 mx-2">
-              <div className="w-full">
+            <div className="relative flex flex-col gap-2">
+              <div className="relative top-0 right-0 w-full">
                 <UserMenu />
               </div>
             </div>

@@ -47,6 +47,7 @@ const UserMenu = () => {
   const { data: session, isPending } = useSession()
 
   const user = session?.user
+  const role = session?.user.role
 
   const handleSignOut = () => {
     startTransition(async () => {
@@ -151,7 +152,7 @@ const UserMenu = () => {
           <DropdownMenuSeparator className="bg-white/10!" />
 
           <DropdownMenuItem
-            onClick={() => router.push("/dashboard")}
+            onClick={() => router.push(`/dashboard/${role}`)}
             className="rounded-lg! px-2.5! py-1.5! text-sm! text-white/80! focus:bg-white/[0.07]! focus:text-white!"
           >
             <LayoutDashboard className="text-violet-400" />

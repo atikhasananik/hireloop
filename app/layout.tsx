@@ -2,10 +2,9 @@ import { Geist, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+
 import { Toaster } from "@/components/ui/toast"
-import { cn } from "@/lib/utils"
-import Navbar from "@/components/navbar/Navbar"
-import Footer from "@/components/footer/Footer"
+import { cn } from "cn"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -14,11 +13,11 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-export default function RootLayout({
+const layout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
-}>) {
+}>) => {
   return (
     <html
       lang="en"
@@ -32,12 +31,13 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-            <Navbar />
           {children}
-           <Footer />
+
           <Toaster />
-          </ThemeProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
 }
+
+export default layout

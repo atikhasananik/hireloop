@@ -9,15 +9,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html>
-      <body>
-        <ThemeProvider>
-          <Navbar />
-          {children}
-          <Footer />
-          <Toaster />
-        </ThemeProvider>
-      </body>
-    </html>
+    <ThemeProvider>
+      <Navbar />
+      {children}
+      <Footer />
+      <Toaster />
+    </ThemeProvider>
   )
 }

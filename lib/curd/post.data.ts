@@ -1,4 +1,4 @@
-import { IJobPayload } from "@/app/dashboard/recruiter/new/page"
+import { IJobPayload } from "../type/type"
 
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL

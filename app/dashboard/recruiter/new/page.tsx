@@ -34,23 +34,9 @@ import { toast } from "@/components/ui/toast"
 import { cn } from "@/lib/utils"
 import { newJobPost } from "@/lib/curd/post.data"
 import { useSession } from "@/lib/auth-client"
+import { IJobPayload } from "@/lib/type/type"
 
-export interface IJobPayload {
-  title: string
-  companyName: string
-  category: string
-  jobType: string
-  isRemote: boolean
-  location: string
-  deadline: string
-  minSalary: number
-  maxSalary: number
-  frequency: string
-  responsibilities: string
-  qualifications: string
-  jobPostBy: string
-  jobPosterRole: string
-}
+
 
 const labelClass = "gap-1 text-[13px] font-medium text-white/75"
 const requiredClass = "text-violet-400"
@@ -108,8 +94,9 @@ const SectionHeading = ({
 )
 
 const AddJob = () => {
-  const [deadline, setDeadline] = useState<Date | undefined>(() => new Date())
+  const [deadline, setDeadline] = useState<Date | undefined>(undefined)
   const [calendarOpen, setCalendarOpen] = useState(false)
+  const [formKey, setFormKey] = useState(0)
   const { data: session } = useSession()
   const email = session?.user.email as string
   const role = session?.user.role as string
@@ -125,7 +112,17 @@ const AddJob = () => {
     >
     const text = (key: string) => String(values[key] ?? "")
 
+    if (!deadline) {
+      toast.add({
+        type: "error",
+        title: "Deadline required",
+        description: "Select an application deadline before publishing.",
+      })
+      return
+    }
+
     const payload: IJobPayload = {
+
       title: text("title"),
       companyName: text("companyName"),
       category: text("category"),
@@ -140,6 +137,8 @@ const AddJob = () => {
       qualifications: text("qualifications"),
       jobPostBy: email,
       jobPosterRole: role,
+      candidates:0,
+      
     }
 
     // data send to the backend
@@ -158,6 +157,11 @@ const AddJob = () => {
         })
         return
       }
+
+      // The submission succeeded, so start over with an empty form.
+      setDeadline(undefined)
+      setCalendarOpen(false)
+      setFormKey((key) => key + 1)
 
       toast.add({
         type: "success",
@@ -181,7 +185,11 @@ const AddJob = () => {
   return (
     <div className="min-h-svh w-full bg-[#090a0f] text-white">
       <div className="mx-auto w-full max-w-4xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8 sm:gap-10">
+        <form
+          key={formKey}
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-8 sm:gap-10"
+        >
           {/* Page header */}
           <header className="flex flex-col gap-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -283,7 +291,7 @@ const AddJob = () => {
                       type="radio"
                       name="jobType"
                       value={type.value}
-                      defaultChecked={type.value === "full-time"}
+                      required
                       className="peer sr-only"
                     />
                     <span className="flex h-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.025] text-[13px] font-medium text-white/55 transition-colors select-none peer-checked:border-violet-500/60 peer-checked:bg-violet-500/10 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-violet-500/40 hover:bg-white/[0.05] peer-checked:hover:bg-violet-500/15">
@@ -439,7 +447,7 @@ const AddJob = () => {
                 <Label htmlFor="frequency" className={labelClass}>
                   Frequency
                 </Label>
-                <Select name="frequency" defaultValue="hour">
+                <Select name="frequency">
                   <SelectTrigger id="frequency" className={selectTriggerClass}>
                     <SelectValue placeholder="Select frequency" />
                   </SelectTrigger>

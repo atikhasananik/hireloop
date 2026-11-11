@@ -44,7 +44,7 @@ export async function AppSidebar() {
   const dynamicUser = {
     seeker: [
       { name: "Dashboard", url: `/dashboard/${role}`, icon: LayoutDashboard },
-      { name: "Find Jobs", url: "/seeker/jobs?q=seeker", icon: Search },
+      { name: "Find Jobs", url: "/jobs?q=seeker", icon: Search },
       { name: "Saved Jobs", url: "/dashboard/seeker/saved", icon: Bookmark },
       {
         name: "Applications",

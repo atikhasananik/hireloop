@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 
 import UpdateJobForm from "@/app/dashboard/_components/recruiter/update/update-job-form"
 import { getSingleJob } from "@/lib/curd/get.data"
-import type { IJobData, IJobPayload } from "@/lib/type/type"
+import type { IJobData } from "@/lib/type/type"
 
 export const metadata: Metadata = {
   title: "Update Job Post · HireLoop",
@@ -18,10 +18,10 @@ const UpdateJobPage = async ({
 }) => {
   const { id } = await params
 
-  let job: IJobPayload | null = null
+  let job: IJobData | null = null
 
   try {
-    job = (await getSingleJob(id)) as IJobPayload | null
+    job = (await getSingleJob(id)) as IJobData | null
   } catch (error) {
     console.error(`Failed to load job ${id}:`, error)
   }
@@ -32,7 +32,7 @@ const UpdateJobPage = async ({
     notFound()
   }
 
-  return <UpdateJobForm initialJobFormData={job} />
+  return <UpdateJobForm job={job} />
 }
 
 export default UpdateJobPage

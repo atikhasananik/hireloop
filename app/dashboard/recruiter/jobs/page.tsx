@@ -40,6 +40,7 @@ import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { getRecruiterJoBData } from "@/lib/curd/get.data"
 import { IJobData } from "@/lib/type/type"
+import JobAction from "../../_components/recruiter/JobAction"
 
 export const metadata: Metadata = {
   title: "Manage Job Posts · HireLoop",
@@ -49,23 +50,7 @@ export const metadata: Metadata = {
 
 type JobStatus = "Active" | "Expired"
 
-type JobRecord = {
-  _id: string
-  title: string
-  companyName: string
-  category: string
-  jobType: string
-  isRemote: boolean
-  location: string
-  deadline: string
-  minSalary: number
-  maxSalary: number
-  frequency: string
-  responsibilities: string
-  qualifications: string
-  jobPostBy: string
-  jobPosterRole: string
-}
+
 
 type CategoryMeta = {
   icon: LucideIcon
@@ -176,12 +161,12 @@ const getStatus = (deadline: string): JobStatus => {
 const formatSalary = (value: number) =>
   value >= 1000 ? `€${Math.round(value / 1000)}k` : `€${value}`
 
-const formatCompensation = (job: JobRecord) =>
+const formatCompensation = (job: IJobData) =>
   `${formatSalary(job.minSalary)} – ${formatSalary(job.maxSalary)} / ${
     frequencyUnit[job.frequency] ?? job.frequency
   }`
 
-const formatLocation = (job: JobRecord) =>
+const formatLocation = (job: IJobData) =>
   job.isRemote ? `Remote (${job.location})` : job.location
 
 const formatDeadline = (deadline: string) => {
@@ -287,7 +272,7 @@ const formatDeadline = (deadline: string) => {
 //   },
 // ]
 
-const JobIcon = ({ job }: { job: JobRecord }) => {
+const JobIcon = ({ job }: { job: IJobData }) => {
   const meta = getCategoryMeta(job.category)
   const Icon = meta.icon
 
@@ -329,37 +314,7 @@ const JobTypeBadge = ({ jobType }: { jobType: string }) => (
   </Badge>
 )
 
-const JobActions = ({ job }: { job: JobRecord }) => (
-  <div className="flex items-center justify-end gap-1.5">
-    <Button
-      type="button"
-      size="sm"
-      aria-label={`Update ${job.title}`}
-      className="h-7! gap-1.5! rounded-md! bg-violet-600! px-2.5! text-[11px]! font-medium! text-white! shadow-[0_0_0_1px_rgba(139,92,246,0.35)]! hover:bg-violet-500!"
-    >
-      <Pencil className="size-3" aria-hidden />
-      Update
-    </Button>
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon-sm"
-      aria-label={`Delete ${job.title}`}
-      className="size-7! rounded-md! text-white/45! hover:bg-white/[0.06]! hover:text-white!"
-    >
-      <Trash2 className="size-3.5" aria-hidden />
-    </Button>
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon-sm"
-      aria-label={`More actions for ${job.title}`}
-      className="size-7! rounded-md! text-white/45! hover:bg-white/[0.06]! hover:text-white!"
-    >
-      <MoreVertical className="size-4" aria-hidden />
-    </Button>
-  </div>
-)
+
 
 const CardField = ({
   label,
@@ -380,7 +335,14 @@ const ManageJobs = async () => {
   const data = await auth.api.getSession({ headers: await headers() })
   const email = data?.user.email as string
 
-  const jobs = await getRecruiterJoBData(email) as IJobData[]
+  let jobs: IJobData[] = []
+
+  try {
+    const result = await getRecruiterJoBData(email)
+    jobs = Array.isArray(result) ? (result as IJobData[]) : []
+  } catch (error) {
+    console.error("Failed to load recruiter jobs:", error)
+  }
 
   return (
     <div className="min-h-svh w-full bg-[#090a0f] text-white">
@@ -542,7 +504,7 @@ const ManageJobs = async () => {
                     </TableCell>
 
                     <TableCell className="px-4 py-3.5">
-                      <JobActions job={job} />
+                      <JobAction job={job} />
                     </TableCell>
                   </TableRow>
                 )
@@ -617,7 +579,7 @@ const ManageJobs = async () => {
                 </div>
 
                 <div className="mt-4 border-t border-white/[0.06] pt-3">
-                  <JobActions job={job} />
+                  <JobAction job={job} />
                 </div>
               </article>
             )

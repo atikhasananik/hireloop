@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
 import { format, isValid, parseISO } from "date-fns"
 import {
   ArrowRight,
@@ -30,8 +31,10 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { toast } from "@/components/ui/toast"
 import { cn } from "@/lib/utils"
-import type { IJobData } from "@/lib/type/type"
+import type { IJobData, IJobPayload } from "@/lib/type/type"
+import { updateJob } from "@/lib/curd/update.data"
 
 const labelClass = "gap-1 text-[13px] font-medium text-white/75"
 const requiredClass = "text-violet-400"
@@ -96,15 +99,75 @@ const UpdateJobForm = ({ job }: { job: IJobData }) => {
     return isValid(date) ? date : undefined
   })
   const [calendarOpen, setCalendarOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const router = useRouter()
+
+  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    // Only retrieve the submitted values; wiring the update API comes later.
+    // Collect every field as form entries, then normalise the values.
     const formValues = new FormData(event.currentTarget)
-    const values = Object.fromEntries(formValues.entries())
+    const values = Object.fromEntries(formValues.entries()) as Record<
+      string,
+      FormDataEntryValue
+    >
+    const text = (key: string) => String(values[key] ?? "")
 
-    console.log("Update job form data:", values)
+    const payload: IJobPayload = {
+      title: text("title"),
+      companyName: text("companyName"),
+      category: text("category"),
+      jobType: text("jobType"),
+      isRemote: values.isRemote === "on",
+      location: text("location"),
+      deadline: text("deadline"),
+      minSalary: Number(values.minSalary ?? 0),
+      maxSalary: Number(values.maxSalary ?? 0),
+      frequency: text("frequency"),
+      responsibilities: text("responsibilities"),
+      qualifications: text("qualifications"),
+      jobPostBy: job.jobPostBy,
+      jobPosterRole: job.jobPosterRole,
+      candidates: job.candidates,
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const result = await updateJob(job._id, payload)
+
+      if (!result?.acknowledged || Number(result?.matchedCount) <= 0) {
+        toast.add({
+          type: "error",
+          title: "Job not updated",
+          description:
+            "The server did not confirm the update. Please try again.",
+        })
+        return
+      }
+
+      toast.add({
+        type: "success",
+        title: "Job updated",
+        description: `"${payload.title}" has been updated successfully.`,
+      })
+
+      router.push("/dashboard/recruiter/jobs")
+    } catch (error) {
+      console.error("Failed to update job:", error)
+
+      toast.add({
+        type: "error",
+        title: "Failed to update job",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again.",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -444,9 +507,10 @@ const UpdateJobForm = ({ job }: { job: IJobData }) => {
           <section>
             <Button
               type="submit"
+              disabled={isSubmitting}
               className="h-10! w-full shrink-0 gap-2 rounded-lg! bg-violet-600! px-4! text-sm! font-medium! text-white! shadow-[0_0_0_1px_rgba(139,92,246,0.35)]! hover:bg-violet-500! sm:w-auto!"
             >
-              Update Job
+              {isSubmitting ? "Updating…" : "Update Job"}
               <ArrowRight className="size-4" aria-hidden />
             </Button>
           </section>

@@ -1,12 +1,11 @@
 "use client"
 
-import { useEffect, useState, type FormEvent } from "react"
+import { Suspense, useEffect, useState, type FormEvent } from "react"
 
 import JobCard from "@/components/jobs/JobCard"
 import JobFilters from "@/components/jobs/JobFilters"
 import JobSearch from "@/components/jobs/JobSearch"
 import JobSort from "@/components/jobs/JobSort"
-import { mockJobs } from "@/lib/jobs/mock-jobs"
 import { useSearchParams } from "next/navigation"
 import { getFilterJobsData } from "@/lib/curd/get.data"
 import { IJobPayload } from "@/lib/type/type"
@@ -18,7 +17,21 @@ type JobFilterValues = {
   isRemote: boolean
 }
 
-const JobsPage = () => {
+export default function JobsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-svh bg-[#08080c] p-8 text-sm text-white/45">
+          Loading jobs…
+        </main>
+      }
+    >
+      <JobsContent />
+    </Suspense>
+  )
+}
+
+const JobsContent = () => {
   const [filterJob, setFilterJob] = useState<IJobPayload[]>()
   const searchParams = useSearchParams()
 
@@ -33,14 +46,24 @@ const JobsPage = () => {
     filterJob()
   }, [queryString])
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const handleFormSubmit = () => {
-      const formData = new FormData(event.currentTarget)
-      const data = Object.entries(formData.entries())
 
-      console.log(data);
+    const formData = new FormData(event.currentTarget)
+
+    const search = String(formData.get("search") ?? "").trim()
+    const category = String(formData.get("category") ?? "")
+    const jobType = String(formData.get("jobType") ?? "")
+    const workMode = String(formData.get("isRemote") ?? "")
+
+    const filterValues: JobFilterValues = {
+      search,
+      category: category === "all" ? "" : category,
+      jobType: jobType === "all" ? "" : jobType,
+      isRemote: workMode === "true",
     }
+
+    console.log(filterValues)
   }
 
   return (
@@ -59,7 +82,7 @@ const JobsPage = () => {
           </p>
         </header>
 
-        <form onSubmit={handleSubmit} className="mt-6">
+        <form onSubmit={handleFormSubmit} className="mt-6">
           <JobSearch />
 
           <div className="mt-6 grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
@@ -93,5 +116,3 @@ const JobsPage = () => {
     </main>
   )
 }
-
-export default JobsPage

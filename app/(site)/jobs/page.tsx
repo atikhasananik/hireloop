@@ -6,7 +6,7 @@ import JobCard from "@/components/jobs/JobCard"
 import JobFilters from "@/components/jobs/JobFilters"
 import JobSearch from "@/components/jobs/JobSearch"
 import JobSort from "@/components/jobs/JobSort"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { getFilterJobsData } from "@/lib/curd/get.data"
 import { IJobPayload } from "@/lib/type/type"
 
@@ -34,8 +34,9 @@ export default function JobsPage() {
 const JobsContent = () => {
   const [filterJob, setFilterJob] = useState<IJobPayload[]>()
   const searchParams = useSearchParams()
-
+  const Router = useRouter()
   const queryString = new URLSearchParams(searchParams).toString()
+  const params = new URLSearchParams()
 
   useEffect(() => {
     const filterJob = async () => {
@@ -63,6 +64,20 @@ const JobsContent = () => {
       isRemote: workMode === "true",
     }
 
+    if (filterValues.category !== "") {
+      params.set("category", filterValues.category)
+    }
+    if (filterValues.isRemote !== false) {
+      params.set("isRemote", "true")
+    }
+    if (filterValues.jobType !== "") {
+      params.set("jobType", filterValues.jobType)
+    }
+    if (filterValues.search !== "") {
+      params.set("search", filterValues.search)
+    }
+
+    Router.push(`/jobs?${params.toString()}`)
     console.log(filterValues)
   }
 

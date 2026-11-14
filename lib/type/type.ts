@@ -18,6 +18,7 @@ export interface IJobData {
 }
 
 export interface IJobPayload {
+  _id?:string
   title: string
   companyName: string
   category: string

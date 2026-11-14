@@ -1,48 +1,46 @@
 "use client"
 
-import type { FormEvent } from "react"
+import { useEffect, useState, type FormEvent } from "react"
 
 import JobCard from "@/components/jobs/JobCard"
 import JobFilters from "@/components/jobs/JobFilters"
 import JobSearch from "@/components/jobs/JobSearch"
 import JobSort from "@/components/jobs/JobSort"
 import { mockJobs } from "@/lib/jobs/mock-jobs"
+import { useSearchParams } from "next/navigation"
+import { getFilterJobsData } from "@/lib/curd/get.data"
+import { IJobPayload } from "@/lib/type/type"
 
 type JobFilterValues = {
   search: string
-  title: string
-  companyName: string
   category: string
   jobType: string
   isRemote: boolean
-  location: string
 }
 
 const JobsPage = () => {
-  
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const handleFormSubmit = (values: JobFilterValues) => {
-      // UI only for now. Connect this to the real jobs endpoint later.
-      console.log("Job filter values:", values)
+  const [filterJob, setFilterJob] = useState<IJobPayload[]>()
+  const searchParams = useSearchParams()
+
+  const queryString = new URLSearchParams(searchParams).toString()
+
+  useEffect(() => {
+    const filterJob = async () => {
+      const data = await getFilterJobsData(queryString)
+      setFilterJob(data)
     }
 
-    const formData = new FormData(event.currentTarget)
-    const getValue = (key: string) => String(formData.get(key) ?? "").trim()
+    filterJob()
+  }, [queryString])
 
-    const category = getValue("category")
-    const jobType = getValue("jobType")
-    const workMode = getValue("isRemote")
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const handleFormSubmit = () => {
+      const formData = new FormData(event.currentTarget)
+      const data = Object.entries(formData.entries())
 
-    handleFormSubmit({
-      search: getValue("search"),
-      title: getValue("title"),
-      companyName: getValue("companyName"),
-      category: category === "all" ? "" : category,
-      jobType: jobType === "all" ? "" : jobType,
-      isRemote: workMode === "true",
-      location: getValue("location"),
-    })
+      console.log(data);
+    }
   }
 
   return (
@@ -75,7 +73,7 @@ const JobsPage = () => {
                 >
                   Found{" "}
                   <span className="font-semibold text-white">
-                    {mockJobs.length.toLocaleString()}
+                    {filterJob?.length.toLocaleString() ?? "0"}
                   </span>{" "}
                   Professional Jobs
                 </h2>
@@ -84,7 +82,7 @@ const JobsPage = () => {
               </div>
 
               <div className="mt-4 grid gap-3">
-                {mockJobs.map((job) => (
+                {filterJob?.map((job) => (
                   <JobCard key={job._id} job={job} />
                 ))}
               </div>

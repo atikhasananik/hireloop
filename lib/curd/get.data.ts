@@ -7,7 +7,7 @@ const getJson = async (path: string) => {
   if (!res.ok) {
     throw new Error(data?.message ?? `Request failed with status ${res.status}`)
   }
-
+ 
   return data
 }
 
@@ -16,3 +16,10 @@ export const getRecruiterJoBData = async (email: string) =>
 
 export const getSingleJob = async (id: string) =>
   getJson(`/get-single-job/${encodeURIComponent(id)}`)
+
+export const getFilterJobsData = async (quary: string) => {
+  const res = await fetch(`${BASE_URL}/get-filter-jobs?${quary}`)
+
+  const data = await res.json()
+  return data
+}

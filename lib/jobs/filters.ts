@@ -1,6 +1,6 @@
 import { format, isValid, parseISO } from "date-fns"
 
-import type { IJobData } from "@/lib/type/type"
+import type { IJobData, IJobPayload } from "@/lib/type/type"
 
 export const JOB_TYPE_OPTIONS = [
   { value: "full-time", label: "Full-time" },
@@ -41,7 +41,7 @@ export const formatJobType = (jobType: string) =>
 export const formatSalary = (value: number) =>
   value >= 1000 ? `$${Math.round(value / 1000)}k` : `$${value}`
 
-export const formatCompensation = (job: IJobData) =>
+export const formatCompensation = (job: IJobPayload) =>
   `${formatSalary(job.minSalary)} – ${formatSalary(job.maxSalary)} / ${
     frequencyUnit[job.frequency] ?? job.frequency
   }`

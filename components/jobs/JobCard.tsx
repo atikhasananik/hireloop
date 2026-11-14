@@ -18,7 +18,7 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
-import type { IJobData } from "@/lib/type/type"
+import type { IJobData, IJobPayload } from "@/lib/type/type"
 import {
   formatCompensation,
   formatDeadline,
@@ -80,7 +80,7 @@ const pillClass =
 
 const pillIconClass = "size-3.5! text-violet-400"
 
-const JobCard = ({ job }: { job: IJobData }) => {
+const JobCard = ({ job }: { job: IJobPayload }) => {
   const meta = categoryMeta[job.category] ?? defaultCategoryMeta
   const Icon = meta.icon
 
